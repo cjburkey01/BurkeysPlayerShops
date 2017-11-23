@@ -1,6 +1,7 @@
 package com.cjburkey.playershops.cmd;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,12 +24,21 @@ public final class CommandHandler {
 		}
 		if (cmd.getPermission() != null && !sender.hasPermission(cmd.getPermission())) {
 			Util.msg(sender, "&4You do not have permission to execute /" + cmd.getName());
-		}
-		if (args.length < cmd.getRequiredArgs()) {
-			showUsage(cmd, sender);
 			return;
 		}
-		cmd.onCall(sender, args);
+		if (cmd.getSubCommandHandler() == null) {
+			if (args.length < cmd.getRequiredArgs() || args.length > cmd.getArgs().length) {
+				showUsage(cmd, sender);
+				return;
+			}
+			cmd.onCall(sender, args);
+		} else {
+			if (args.length == 0) {
+				Util.msg(sender, "&4Usage: /" + cmd.getName() + " help");
+				return;
+			}
+			cmd.getSubCommandHandler().onCall(cmd, args[0], sender, Arrays.copyOfRange(args, 1, args.length));
+		}
 	}
 	
 	private static ICommand getCommand(String name) {

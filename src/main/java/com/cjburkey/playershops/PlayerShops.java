@@ -13,6 +13,8 @@ public class PlayerShops extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		
+		IO.init(this);
+		
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		

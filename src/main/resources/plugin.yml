@@ -20,27 +20,7 @@ permissions:
 
 commands:
   shop:
-    description: Opens another player''s shop.
-    usage: /<command> <player>
+    description: The main player shops command.
+    usage: /shop help
     permission: playershops.use
     permission-message: '§4You do not have permission to use /shop'
-  createshop:
-    description: Create a shop.
-    usage: /<command>
-    permission: playershops.edit
-    permission-message: '§4You do not have permission to use /createshop'
-  editshopadd:
-    description: Adds the held item to the shop with the same quantity.
-    usage: /<command> [player]
-    permission: playershops.edit
-    permission-message: '§4You do not have permission to use /editshopadd'
-  editshoprem:
-    description: Removes the held item from the shop, ignores quantity.
-    usage: /<command> [player]
-    permission: playershops.edit
-    permission-message: '§4You do not have permission to use /editshoprem'
-  deleteshop:
-    description: Deletes the player''s shop.
-    usage: /<command> [player]
-    permission: playershops.edit
-    permission-message: '§4You do not have permission to use /deleteshop'
