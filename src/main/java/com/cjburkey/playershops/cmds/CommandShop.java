@@ -1,8 +1,6 @@
 package com.cjburkey.playershops.cmds;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
-import com.cjburkey.playershops.PlayerShops;
 import com.cjburkey.playershops.cmd.CommandBase;
 import com.cjburkey.playershops.cmd.SubCommandHandler;
 
@@ -17,6 +15,7 @@ public final class CommandShop extends CommandBase {
 		sch.addSubCommand(new SubCommandAdd());
 		sch.addSubCommand(new SubCommandRemove());
 		sch.addSubCommand(new SubCommandRefill());
+		sch.addSubCommand(new SubCommandDelete());
 	}
 	
 	public String getName() {
@@ -27,8 +26,8 @@ public final class CommandShop extends CommandBase {
 		return true;
 	}
 	
-	public Permission getPermission() {
-		return PlayerShops.getInstance().getPermission("playershops.use");
+	public String getPermission() {
+		return "playershops.use";
 	}
 	
 	public SubCommandHandler getSubCommandHandler() {

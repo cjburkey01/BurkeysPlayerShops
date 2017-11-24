@@ -11,7 +11,7 @@ public final class SubCommandHandler {
 	
 	public SubCommandHandler(boolean autoHelp) {
 		if (autoHelp) {
-			addSubCommand(new SubCommandHelp());
+			addSubCommand(new SubCommandBasicHelp());
 		}
 	}
 	

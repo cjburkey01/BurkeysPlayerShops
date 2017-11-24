@@ -5,8 +5,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.cjburkey.playershops.cmd.CommandHandler;
 import com.cjburkey.playershops.cmds.CommandShop;
+import com.cjburkey.playershops.shop.ShopHandler;
 
-public class PlayerShops extends JavaPlugin {
+public final class PlayerShops extends JavaPlugin {
 	
 	private static PlayerShops instance;
 	
@@ -27,6 +28,9 @@ public class PlayerShops extends JavaPlugin {
 		
 		CommandHandler.registerCommand(this, new CommandShop());
 		Util.log("Registered commands.");
+
+		Util.log("Loading shops...");
+		ShopHandler.load();
 	}
 	
 	public void onDisable() {

@@ -1,11 +1,10 @@
 package com.cjburkey.playershops.cmds;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
 import com.cjburkey.playershops.cmd.ICommand;
 import com.cjburkey.playershops.cmd.ISubCommand;
 
-public class SubCommandOpen implements ISubCommand {
+public final class SubCommandOpen implements ISubCommand {
 	
 	public String getName() {
 		return "open";
@@ -15,11 +14,15 @@ public class SubCommandOpen implements ISubCommand {
 		return new String[] { "player" };
 	}
 	
+	public boolean playerOnly() {
+		return true;
+	}
+	
 	public int getRequiredArgs() {
 		return 1;
 	}
 	
-	public Permission getPermission() {
+	public String getPermission() {
 		return null;
 	}
 	

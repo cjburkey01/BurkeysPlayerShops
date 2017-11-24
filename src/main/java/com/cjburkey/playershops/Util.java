@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class Util {
+public final class Util {
 	
 	private static final Logger log = Logger.getLogger("Minecraft");
 	

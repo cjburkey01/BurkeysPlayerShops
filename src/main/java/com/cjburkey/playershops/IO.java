@@ -35,15 +35,15 @@ public final class IO {
 		return getFileForPlayer(ply).exists();
 	}
 	
-	public static PlayerShop getShopFromPlayer(UUID ply) {
-		if (!playerHasShop(ply)) {
-			return null;
+	public static void deleteShop(UUID player) {
+		if (playerHasShop(player)) {
+			getFileForPlayer(player).delete();
 		}
-		return null;
 	}
 	
-	public static PlayerShop getShop(UUID player) {
+	public static PlayerShop readShop(UUID player) {
 		if (!playerHasShop(player)) {
+			Util.log("Player doesn't have shop: " + player);
 			return null;
 		}
 		BufferedReader reader = null;
@@ -62,13 +62,13 @@ public final class IO {
 		return null;
 	}
 	
-	public static boolean writeShop(UUID player, PlayerShop shop) {
-		if (playerHasShop(player)) {
-			getFileForPlayer(player).delete();
+	public static boolean writeShop(PlayerShop shop) {
+		if (playerHasShop(shop.getOwner())) {
+			getFileForPlayer(shop.getOwner()).delete();
 		}
 		FileWriter writer;
 		try {
-			writer = new FileWriter(getFileForPlayer(player));
+			writer = new FileWriter(getFileForPlayer(shop.getOwner()));
 			writer.write(shopToString(shop));
 			writer.close();
 			return true;
@@ -77,7 +77,28 @@ public final class IO {
 		return false;
 	}
 	
-	public static PlayerShop shopFromString(UUID owner, String input) {
+	public static PlayerShop[] getAllShops() {
+		List<PlayerShop> shops = new ArrayList<>();
+		File[] dir = shopDir.listFiles();
+		for (File file : dir) {
+			String uuid = file.getName().substring(0, file.getName().length() - 4);
+			final UUID ply;
+			try {
+				ply = UUID.fromString(uuid);
+			} catch (Exception e) {
+				continue;
+			}
+			PlayerShop shop = readShop(ply);
+			if (shop == null) {
+				continue;
+			}
+			shops.add(shop);
+		}
+		return shops.toArray(new PlayerShop[shops.size()]);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static PlayerShop shopFromString(UUID owner, String input) {
 		YamlConfiguration conf = new YamlConfiguration();
 		try {
 			conf.loadFromString(input);
@@ -91,12 +112,14 @@ public final class IO {
 			return null;
 		}
 		Object tmp = conf.get("items");
-		if (tmp != null && tmp instanceof ItemStack[]) {
-			items = (ItemStack[]) tmp;
+		if (tmp != null && tmp instanceof ArrayList) {
+			List<ItemStack> arr = (ArrayList<ItemStack>) tmp;
+			items = arr.toArray(new ItemStack[arr.size()]);
 		}
 		tmp = conf.get("data");
-		if (tmp != null && tmp instanceof String[]) {
-			data = (String[]) tmp;
+		if (tmp != null && tmp instanceof ArrayList) {
+			List<String> arr = (ArrayList<String>) tmp;
+			data = arr.toArray(new String[arr.size()]);
 		}
 		if (items == null || data == null || items.length != data.length) {
 			return null;
@@ -108,7 +131,7 @@ public final class IO {
 		return new PlayerShop(owner, map);
 	}
 	
-	public static String shopToString(PlayerShop shop) {
+	private static String shopToString(PlayerShop shop) {
 		List<ItemStack> items = new ArrayList<>();
 		List<String> data = new ArrayList<>();
 		for (Entry<ItemStack, ShopItemData> entry : shop.getItems()) {
@@ -118,7 +141,7 @@ public final class IO {
 		return shopToString(items.toArray(new ItemStack[items.size()]), data.toArray(new String[data.size()]));
 	}
 	
-	public static String shopToString(ItemStack[] items, String[] data) {
+	private static String shopToString(ItemStack[] items, String[] data) {
 		YamlConfiguration conf = new YamlConfiguration();
 		conf.set("items", items);
 		conf.set("data", data);

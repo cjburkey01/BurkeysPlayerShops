@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.bukkit.inventory.ItemStack;
 import com.cjburkey.playershops.Util;
 
-public class PlayerShop {
+public final class PlayerShop {
 	
 	private final UUID owner;
 	private final HashMap<ItemStack, ShopItemData> items;
@@ -30,6 +30,9 @@ public class PlayerShop {
 			return false;
 		}
 		ShopItemData data = getData(in);
+		if (data == null) {
+			return false;
+		}
 		data.setStock(data.getStock() + in.getAmount());
 		in.setAmount(0);
 		return true;
@@ -94,6 +97,10 @@ public class PlayerShop {
 			return false;
 		}
 		return true;
+	}
+	
+	public String toString() {
+		return owner.toString();
 	}
 	
 }

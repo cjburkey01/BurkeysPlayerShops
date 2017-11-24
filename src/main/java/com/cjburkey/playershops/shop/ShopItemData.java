@@ -2,7 +2,7 @@ package com.cjburkey.playershops.shop;
 
 import java.util.regex.Pattern;
 
-public class ShopItemData {
+public final class ShopItemData {
 	
 	private final double buy;
 	private final double sell;
@@ -46,6 +46,8 @@ public class ShopItemData {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(sell);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(amt);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -64,6 +66,9 @@ public class ShopItemData {
 			return false;
 		}
 		if (Double.doubleToLongBits(sell) != Double.doubleToLongBits(other.sell)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(amt) != Double.doubleToLongBits(other.amt)) {
 			return false;
 		}
 		return true;

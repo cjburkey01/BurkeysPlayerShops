@@ -7,10 +7,10 @@ import com.cjburkey.playershops.cmd.ICommand;
 import com.cjburkey.playershops.cmd.ISubCommand;
 import com.cjburkey.playershops.shop.ShopHandler;
 
-public final class SubCommandCreate implements ISubCommand {
+public final class SubCommandDelete implements ISubCommand {
 	
 	public String getName() {
-		return "create";
+		return "delete";
 	}
 	
 	public String[] getArgs() {
@@ -37,17 +37,17 @@ public final class SubCommandCreate implements ISubCommand {
 		Player ply = (Player) sender;
 		if (args.length == 1) {
 			if (!ply.hasPermission("playershops.admin")) {
-				Util.msg(sender, "&4You do not have permission to create shops for other players.");
+				Util.msg(sender, "&4You do not have permission to delete shops for other players.");
 				return;
 			}
 			return;
 		}
-		if (ShopHandler.hasShop(ply.getUniqueId())) {
-			Util.msg(sender, "&4You already have a shop. Use &l/shop help&r&4 to see how to manage it.");
+		if (!ShopHandler.hasShop(ply.getUniqueId())) {
+			Util.msg(sender, "&4You do not have a shop. Use &l/shop create&r&4 to create one.");
 			return;
 		}
-		ShopHandler.createShop(ply.getUniqueId());
-		Util.msg(sender, "&2Your shop has been created.");
+		ShopHandler.deleteShop(ply.getUniqueId());
+		Util.msg(sender, "&2Your shop has been deleted.");
 	}
 	
 }

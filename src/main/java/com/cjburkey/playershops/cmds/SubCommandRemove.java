@@ -1,11 +1,10 @@
 package com.cjburkey.playershops.cmds;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
 import com.cjburkey.playershops.cmd.ICommand;
 import com.cjburkey.playershops.cmd.ISubCommand;
 
-public class SubCommandRemove implements ISubCommand {
+public final class SubCommandRemove implements ISubCommand {
 	
 	public String getName() {
 		return "remove";
@@ -15,12 +14,16 @@ public class SubCommandRemove implements ISubCommand {
 		return new String[] { "player" };
 	}
 	
+	public boolean playerOnly() {
+		return true;
+	}
+	
 	public int getRequiredArgs() {
 		return 0;
 	}
 	
-	public Permission getPermission() {
-		return null;
+	public String getPermission() {
+		return "playershops.edit";
 	}
 	
 	public void onCall(ICommand parent, CommandSender sender, String[] args) {
