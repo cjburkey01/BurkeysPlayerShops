@@ -32,19 +32,19 @@ public final class EconHandler {
 		ShopItemData dat = shop.getData(stack);
 		Util.log(stack);
 		if (dat.getBuy() < 0.0d) {
-			Util.msg(ply, "&cBuying is disabled for this item in this shop.");
+			Util.msg(true, ply, LanguageHandler.get("buyDisabled"));
 			return;
 		}
 		if (dat.getStock() < amt) {
-			Util.msg(ply, "&cNot enough items in stock.");
+			Util.msg(true, ply, LanguageHandler.get("buyStockout"));
 			return;
 		}
 		if (dat.getBuy() > 0.0d && !take(ply.getUniqueId(), amt * dat.getBuy())) {
-			Util.msg(ply, "&cYou do not have enough money.");
+			Util.msg(true, ply, LanguageHandler.get("moneyLacking"));
 			return;
 		}
 		if (dat.getBuy() > 0.0d && !give(shop.getOwner(), amt * dat.getBuy())) {
-			Util.msg(ply, "&cFailed to give money to shop owner, refunding you.");
+			Util.msg(true, ply, LanguageHandler.get("buyFailed"));
 			give(ply.getUniqueId(), amt * dat.getBuy());
 			return;
 		}
@@ -56,20 +56,20 @@ public final class EconHandler {
 		stack.setAmount(amt);
 		ShopItemData dat = shop.getData(stack);
 		if (dat.getSell() < 0.0d) {
-			Util.msg(ply, "&cSelling is disabled for this item in this shop.");
+			Util.msg(true, ply, LanguageHandler.get("sellDisabled"));
 			return;
 		}
 		if (!ply.getInventory().containsAtLeast(stack, amt)) {
-			Util.msg(ply, "&cYou do not have enough of this item.");
+			Util.msg(true, ply, LanguageHandler.get("sellLacking"));
 			return;
 		}
 		if (dat.getSell() > 0.0d) {
 			if (!take(shop.getOwner(), amt * dat.getSell())) {
-				Util.msg(ply, "&cThe shop owner does not have enough money to pay you.");
+				Util.msg(true, ply, LanguageHandler.get("sellNotEnoughMoney"));
 				return;
 			}
 			if (!give(ply.getUniqueId(), amt * dat.getSell())) {
-				Util.msg(ply, "&cFailed to transfer money to shop owner, refunding shop owner.");
+				Util.msg(true, ply, LanguageHandler.get("sellFailed"));
 				give(shop.getOwner(), amt * dat.getSell());
 				return;
 			}

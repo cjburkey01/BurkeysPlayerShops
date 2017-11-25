@@ -16,6 +16,7 @@ public final class CommandShop extends CommandBase {
 		sch.addSubCommand(new SubCommandAdd());
 		sch.addSubCommand(new SubCommandRefill());
 		sch.addSubCommand(new SubCommandDelete());
+		sch.addSubCommand(new SubCommandReload());
 	}
 	
 	public String getName() {
@@ -23,7 +24,7 @@ public final class CommandShop extends CommandBase {
 	}
 	
 	public boolean playerOnly() {
-		return true;
+		return false;
 	}
 	
 	public String getPermission() {

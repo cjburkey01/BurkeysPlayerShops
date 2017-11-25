@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import com.cjburkey.playershops.IO;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.PlayerStorage;
 import com.cjburkey.playershops.Util;
 import com.cjburkey.playershops.gui.GuiShop;
@@ -74,7 +75,7 @@ public final class ShopHandler {
 	
 	public static void showShop(UUID shopid, Player player, int page) {
 		PlayerShop shop = ShopHandler.getShop(shopid);
-		Inventory invShop = Util.createGui(player, SHOP_ROWS + 1, "Shop of &l" + PlayerStorage.getName(shopid));
+		Inventory invShop = Util.createGui(player, SHOP_ROWS + 1, LanguageHandler.getFormat("guiTitle", PlayerStorage.getName(shopid)));
 		GuiShop shopGui = new GuiShop(shop, invShop, player, page);
 		GuiHandler.open(shopGui);
 	}

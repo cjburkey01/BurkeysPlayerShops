@@ -3,6 +3,7 @@ package com.cjburkey.playershops.cmd;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.command.CommandSender;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.Util;
 
 public final class SubCommandHandler {
@@ -18,11 +19,11 @@ public final class SubCommandHandler {
 	public void onCall(ICommand parent, String subCmd, CommandSender sender, String[] args) {
 		ISubCommand cmd = getCommand(subCmd);
 		if (cmd == null) {
-			Util.msg(sender, "&4Usage: /" + parent.getName() + " help");
+			Util.msg(false, sender, LanguageHandler.get("usageErr") + " /" + parent.getName() + " help");
 			return;
 		}
 		if (cmd.getPermission() != null && !sender.hasPermission(cmd.getPermission())) {
-			Util.msg(sender, "&4You do not have permission to execute /" + parent.getName() + ' ' + subCmd);
+			Util.msg(false, sender, LanguageHandler.get("missingPerm") + " /" + parent.getName() + ' ' + subCmd);
 			return;
 		}
 		if (args.length < cmd.getRequiredArgs() || args.length > cmd.getArgs().length) {
@@ -55,10 +56,18 @@ public final class SubCommandHandler {
 		return null;
 	}
 	
-	private static void showUsage(ICommand cmd, ISubCommand subCmd, CommandSender sender) {
+	private static void showUsage(ICommand parent, ISubCommand subCmd, CommandSender sender) {
+		Util.msg(true, sender, getUsage(true, parent, subCmd));
+	}
+	
+	public static String getUsage(boolean usageErr, ICommand parent, ISubCommand subCmd) {
 		StringBuilder out = new StringBuilder();
-		out.append("&4Usage: /");
-		out.append(cmd.getName());
+		if (usageErr) {
+			out.append(LanguageHandler.get("usageErr"));
+			out.append(' ');
+		}
+		out.append('/');
+		out.append(parent.getName());
 		out.append(' ');
 		out.append(subCmd.getName());
 		out.append(' ');
@@ -71,7 +80,7 @@ public final class SubCommandHandler {
 				out.append(' ');
 			}
 		}
-		Util.msg(sender, out.toString());
+		return out.toString();
 	}
 	
 }

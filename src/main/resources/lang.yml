@@ -1,0 +1,63 @@
+prefix: '&6PlayerShops'
+usage: '&fUsage:'
+usageErr: '&cUsage:'
+missingPerm: '&cYou do not have permission to execute:'
+generalErr: '&cAn error occurred.'
+onlyIngame: '&cOnly ingame players may execute /%s'
+
+reloaded: '&2Reloaded Burkey''s Player Shops'
+nextPage: '&2Next Page'
+prevPage: '&cPrevious Page'
+
+moneyLacking: '&cYou do not have enough money.'
+
+buyDisabled: '&cBuying is disabled for this item in this shop.'
+buyStockout: '&cNot enough items in stock.'
+buyFailed: '&cFailed to give money to shop owner, refunding you.'
+
+sellDisabled: '&cSelling is disabled for this item in this shop.'
+sellLacking: '&cYou do not have enough of this item.'
+sellNotEnoughMoney: '&cThe shop owner does not have enough money to pay you.'
+sellFailed: '&cFailed to transfer money to shop owner, refunding shop owner.'
+
+createShop: '&cYou do not have a shop. Use &l/shop create&r&c to create one.'
+
+addIngameOnly: '&cOnly ingame players may add to their shops.'
+addMissingPermOther: '&cYou do not have permission to delete shops for other players.'
+addValidPrice: '&cPlease enter valid prices.'
+addInHand: '&cPlease hold the item to add to your shop in your main hand.'
+addAlreadyHas: '&cYour shop already contains this item.'
+addSuccess: '&2The item has been added to your shop. Use &l/shop refill&r&2 to add items to the amount.'
+
+createIngameOnly: '&cOnly ingame players may create shops for themselves.'
+createMissingPermOther: '&cYou do not have permission to create shops for other players.'
+createAlreadyHaveShop: '&cYou already have a shop. See &l/shop help&r&c to manage it.'
+shopCreated: '&2Your shop has been created.'
+
+deleteIngameOnly: '&cOnly ingame players may delete their shops.'
+deleteMissingPermOther: '&cYou do not have permission to delete shops for other players.'
+deleteNoShop: '&cYou do not have a shop. Use &l/shop create&r&c to create one.'
+deleteSuccess: '&2Your shop has been deleted.'
+
+openIngameOnly: '&cOnly ingame players may view shops.'
+openPlayerNotJoined: '&cThat player has not joined the server before.'
+openShopNotCreated: '&cThat user has not created a shop.'
+openSuccess: '&2Opened shop of &l%s.'
+
+refillIngameOnly: '&cOnly ingame players may refill shops for themselves.'
+refillMissingPermOther: '&cYou do not have permission to refill shops for other players.'
+refillInHand: '&cPlease hold the item to fill in the shop in your main hand.'
+refillItemNotInShop: '&cYour shop does not contain this item. Use &l/shop add&r&c to add it.'
+refillSuccess: '&2The item has been refilled in your shop.'
+
+removeIngameOnly: '&cOnly ingame players may remove items from shops for themselves.'
+removeMissingPermOther: '&cYou do not have permission to remove items from shops for other players.'
+removeInHand: '&cPlease hold the item to remove from your shop in your main hand.'
+removeItemNotInShop: '&cYour shop does not contain this item.'
+removeSuccess: '&2The item has been removed to your shop.'
+
+guiTitle: 'Shop of &l%s'
+guiPrices: '&fPrices:'
+guiBuyPrice: '  &2Buy: &l%s'
+guiSellPrice: '  &cSell: &l%s'
+guiStock: '&9In stock: &l%s'

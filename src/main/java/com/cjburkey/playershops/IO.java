@@ -19,11 +19,13 @@ public final class IO {
 	
 	public static File pluginDir;
 	public static File playerStore;
+	public static File langFile;
 	public static File shopDir;
 	
 	public static void init(PlayerShops p) {
 		pluginDir = p.getDataFolder();
 		playerStore = new File(pluginDir, "/players.txt");
+		langFile = new File(pluginDir, "/lang.yml");
 		shopDir = new File(pluginDir, "/data/");
 		if (!shopDir.exists()) {
 			shopDir.mkdirs();

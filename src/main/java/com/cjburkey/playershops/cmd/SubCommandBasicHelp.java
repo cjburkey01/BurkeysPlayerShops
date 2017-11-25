@@ -27,19 +27,17 @@ public final class SubCommandBasicHelp implements ISubCommand {
 
 	public void onCall(ICommand parent, CommandSender sender, String[] args) {
 		StringBuilder out = new StringBuilder();
-		out.append("&4Usage: /");
-		out.append(parent.getName());
-		out.append(' ');
-		out.append('<');
+		out.append('\n');
 		ISubCommand[] cmds = parent.getSubCommandHandler().getCommands();
 		for (int i = 0; i < cmds.length; i ++) {
-			out.append(cmds[i].getName());
+			out.append(' ');
+			out.append(' ');
+			out.append(SubCommandHandler.getUsage(false, parent, cmds[i]));
 			if (i < cmds.length - 1) {
-				out.append('/');
+				out.append('\n');
 			}
 		}
-		out.append('>');
-		Util.msg(sender, out.toString());
+		Util.msg(true, sender, out.toString());
 	}
 	
 }

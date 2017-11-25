@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import com.cjburkey.playershops.EconHandler;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.Util;
 import com.cjburkey.playershops.inventory.GuiHandler;
 import com.cjburkey.playershops.inventory.IInvScreen;
@@ -64,6 +65,9 @@ public class GuiShop implements IInvScreen {
 		if (page > 0) {
 			Material prevPage = Material.BARRIER;
 			ItemStack prev = new ItemStack(prevPage, 1);
+			ItemMeta meta = prev.getItemMeta();
+			meta.setDisplayName(Util.color(LanguageHandler.get("prevPage")));
+			prev.setItemMeta(meta);
 			i = inv.getSize() - 9;
 			inv.setItem(i, prev);
 			clickableItems[i] = new InvGuiItem(prev, (e) -> {
@@ -76,6 +80,9 @@ public class GuiShop implements IInvScreen {
 		if (page < (int) Math.ceil(((double) shop.getItems().size() / (double) (ShopHandler.SHOP_ROWS * 9))) - 1) {
 			Material nextPage = Material.FEATHER;
 			ItemStack next = new ItemStack(nextPage, 1);
+			ItemMeta meta = next.getItemMeta();
+			meta.setDisplayName(Util.color(LanguageHandler.get("nextPage")));
+			next.setItemMeta(meta);
 			i = inv.getSize() - 1;
 			inv.setItem(i, next);
 			clickableItems[i] = new InvGuiItem(next, (e) -> {
@@ -123,10 +130,10 @@ public class GuiShop implements IInvScreen {
 	
 	private static List<String> getLore(ShopItemData data) {
 		return Arrays.asList(new String[] {
-			Util.color("&fPrices:"),
-			Util.color("  &2Buy: &l" + ((data.getBuy() < 0.0d) ? "Disabled" : data.getBuy())),
-			Util.color("  &cSell: &l" + ((data.getSell() < 0.0d) ? "Disabled" : data.getSell())),
-			Util.color("&9In stock: &l" + ((data.getStock() > 0) ? data.getStock() : "None"))
+			Util.color(LanguageHandler.get("guiPrices")),
+			Util.color(LanguageHandler.getFormat("guiBuyPrice", ((data.getBuy() < 0.0d) ? "Disabled" : data.getBuy()))),
+			Util.color(LanguageHandler.getFormat("guiSellPrice", ((data.getSell() < 0.0d) ? "Disabled" : data.getSell()))),
+			Util.color(LanguageHandler.getFormat("guiStock", ((data.getStock() > 0) ? data.getStock() : "None"))),
 		});
 	}
 	

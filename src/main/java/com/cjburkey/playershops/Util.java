@@ -1,6 +1,7 @@
 package com.cjburkey.playershops;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,8 +17,14 @@ public final class Util {
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 	
-	public static final void msg(CommandSender to, Object msg) {
-		to.sendMessage(color(msg + ""));
+	public static final void msg(boolean prefix, CommandSender to, Object msg) {
+		String msgOut = "";
+		if (prefix) {
+			msgOut = color(String.format("&f[&r%s&f]&r %s", LanguageHandler.get("prefix"), msg));
+		} else {
+			msgOut = color((msg == null) ? "null" : msg.toString());
+		}
+		to.sendMessage(msgOut);
 	}
 	
 	public static final void log(Object msg) {
@@ -25,8 +32,7 @@ public final class Util {
 	}
 	
 	public static final String format(double i) {
-		String better = EconHandler.getEconomy().format(i).replaceAll("[^\\d.]", "");
-		return "$" + NumberFormat.getInstance().format(Double.parseDouble(better));
+		return "$" + NumberFormat.getCurrencyInstance(Locale.getDefault()).format(i);
 	}
 	
 	private static String prepMsg(Object msg) {

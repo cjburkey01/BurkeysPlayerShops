@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.Util;
 
 public final class CommandHandler {
@@ -15,15 +16,16 @@ public final class CommandHandler {
 	public static void onCommand(String command, CommandSender sender, String[] args) {
 		ICommand cmd = getCommand(command);
 		if (cmd == null) {
-			Util.msg(sender, "&4Command " + command + " called but does not exist in the command system.");
+			Util.log("Command '" + command + "' was registered manually and does not exist in the command system.");
+			Util.msg(false, sender, LanguageHandler.get("generalErr"));
 			return;
 		}
 		if (cmd.playerOnly() && !(sender instanceof Player)) {
-			Util.msg(sender, "&4Only ingame players may execute /" + cmd.getName());
+			Util.msg(false, sender, LanguageHandler.getFormat("onlyIngame", cmd.getName()));
 			return;
 		}
 		if (cmd.getPermission() != null && !sender.hasPermission(cmd.getPermission())) {
-			Util.msg(sender, "&4You do not have permission to execute /" + cmd.getName());
+			Util.msg(false, sender, LanguageHandler.get("missingPerm") + " /" + cmd.getName());
 			return;
 		}
 		if (cmd.getSubCommandHandler() == null) {
@@ -34,7 +36,7 @@ public final class CommandHandler {
 			cmd.onCall(sender, args);
 		} else {
 			if (args.length == 0) {
-				Util.msg(sender, "&4Usage: /" + cmd.getName() + " help");
+				Util.msg(false, sender, LanguageHandler.get("usageErr") + " /" + cmd.getName() + " help");
 				return;
 			}
 			cmd.getSubCommandHandler().onCall(cmd, args[0], sender, Arrays.copyOfRange(args, 1, args.length));
@@ -52,7 +54,9 @@ public final class CommandHandler {
 	
 	private static void showUsage(ICommand cmd, CommandSender sender) {
 		StringBuilder out = new StringBuilder();
-		out.append("&4Usage: /");
+		out.append(LanguageHandler.get("usageErr"));
+		out.append(' ');
+		out.append('/');
 		out.append(cmd.getName());
 		out.append(' ');
 		for (int i = 0; i < cmd.getArgs().length; i ++) {
@@ -64,7 +68,7 @@ public final class CommandHandler {
 				out.append(' ');
 			}
 		}
-		Util.msg(sender, out.toString());
+		Util.msg(true, sender, out.toString());
 	}
 	
 	public static boolean registerCommand(JavaPlugin plugin, CommandBase cmd) {

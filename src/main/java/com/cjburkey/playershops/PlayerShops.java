@@ -24,6 +24,9 @@ public final class PlayerShops extends JavaPlugin {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		
+		LanguageHandler.init(this, IO.langFile);
+		LanguageHandler.load();
+		
 		getServer().getPluginManager().registerEvents(new Listener() {
 			@EventHandler
 			public void onJoin(PlayerJoinEvent e) {
@@ -31,6 +34,8 @@ public final class PlayerShops extends JavaPlugin {
 			}
 		}, this);
 		getServer().getPluginManager().registerEvents(new GuiEventHandler(), this);
+		
+		this.saveDefaultConfig();
 		
 		if (!EconHandler.init(this)) {
 			Util.log("Vault support could not be initialized.");

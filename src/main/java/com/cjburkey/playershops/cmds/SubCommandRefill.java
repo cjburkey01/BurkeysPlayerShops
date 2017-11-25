@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.Util;
 import com.cjburkey.playershops.cmd.ICommand;
 import com.cjburkey.playershops.cmd.ISubCommand;
@@ -35,20 +36,20 @@ public final class SubCommandRefill implements ISubCommand {
 	
 	public void onCall(ICommand parent, CommandSender sender, String[] args) {
 		if (!(sender instanceof Player)) {
-			Util.msg(sender, "&4Only ingame players may refill shops for themselves.");
+			Util.msg(false, sender, LanguageHandler.get("refillIngameOnly"));
 			return;
 		}
 		Player ply = (Player) sender;
 		if (args.length == 3) {
 			// TODO: ADMIN
 			if (!ply.hasPermission("playershops.admin")) {
-				Util.msg(ply, "&4You do not have permission to refill shops for other players.");
+				Util.msg(false, ply, LanguageHandler.get("refillMissingPermOther"));
 				return;
 			}
 			return;
 		}
 		if (!ShopHandler.hasShop(ply.getUniqueId())) {
-			Util.msg(ply, "&4You do not have a shop. Use &l/shop create&r&4 to create one.");
+			Util.msg(true, ply, LanguageHandler.get("createShop"));
 			return;
 		}
 		refillShop(ply.getUniqueId(), ply);
@@ -57,17 +58,17 @@ public final class SubCommandRefill implements ISubCommand {
 	private void refillShop(UUID shopId, Player holder) {
 		ItemStack stack = holder.getInventory().getItemInMainHand();
 		if (stack == null || stack.getType() == null || stack.getType().equals(Material.AIR) || stack.getAmount() <= 0) {
-			Util.msg(holder, "&4Please hold the item to add to the shop in your main hand.");
+			Util.msg(true, holder, LanguageHandler.get("refillInHand"));
 			return;
 		}
 		PlayerShop shop = ShopHandler.getShop(shopId);
 		if (!shop.hasItem(stack)) {
-			Util.msg(holder, "&4Your shop does not contain this item.");
+			Util.msg(true, holder, LanguageHandler.get("refillItemNotInShop"));
 			return;
 		}
 		shop.addQuantity(stack);
 		ShopHandler.save();
-		Util.msg(holder, "&2The item has been refilled in your shop.");
+		Util.msg(true, holder, LanguageHandler.get("refillSuccess"));
 	}
 	
 }

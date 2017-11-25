@@ -3,6 +3,7 @@ package com.cjburkey.playershops.cmds;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.PlayerStorage;
 import com.cjburkey.playershops.Util;
 import com.cjburkey.playershops.cmd.ICommand;
@@ -33,21 +34,21 @@ public final class SubCommandOpen implements ISubCommand {
 	
 	public void onCall(ICommand parent, CommandSender sender, String[] args) {
 		if (!(sender instanceof Player)) {
-			Util.msg(sender, "&4Only ingame players may view shops.");
+			Util.msg(false, sender, LanguageHandler.get("openIngameOnly"));
 			return;
 		}
 		Player ply = (Player) sender;
 		UUID other = PlayerStorage.getUUID(args[0]);
 		if (other == null) {
-			Util.msg(sender, "&4That player has not joined the server.");
+			Util.msg(false, sender, LanguageHandler.get("openPlayerNotJoined"));
 			return;
 		}
 		if (!ShopHandler.hasShop(other)) {
-			Util.msg(ply, "&4That user does not have a shop.");
+			Util.msg(true, ply, LanguageHandler.get("openShopNotCreated"));
 			return;
 		}
 		ShopHandler.showShop(other, ply, 0);
-		Util.msg(ply, "&2The shop has been opened.");
+		Util.msg(true, ply, LanguageHandler.getFormat("openSuccess", PlayerStorage.getName(other)));
 	}
 	
 }

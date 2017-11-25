@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import com.cjburkey.playershops.LanguageHandler;
 import com.cjburkey.playershops.Util;
 import com.cjburkey.playershops.cmd.ICommand;
 import com.cjburkey.playershops.cmd.ISubCommand;
@@ -35,31 +36,37 @@ public final class SubCommandAdd implements ISubCommand {
 	
 	public void onCall(ICommand parent, CommandSender sender, String[] args) {
 		if (!(sender instanceof Player)) {
-			Util.msg(sender, "&4Only ingame players may create shops for themselves.");
+			Util.msg(false, sender, LanguageHandler.get("addIngameOnly"));
 			return;
 		}
 		Player ply = (Player) sender;
 		if (args.length == 3) {
 			// TODO: ADMIN
 			if (!ply.hasPermission("playershops.admin")) {
-				Util.msg(ply, "&4You do not have permission to delete shops for other players.");
+				Util.msg(false, ply, LanguageHandler.get("addMissingPermOther"));
 				return;
 			}
 			return;
 		}
 		if (!ShopHandler.hasShop(ply.getUniqueId())) {
-			Util.msg(ply, "&4You do not have a shop. Use &l/shop create&r&4 to create one.");
+			Util.msg(true, ply, LanguageHandler.get("createShop"));
 			return;
 		}
-		double buy = -1.0f;
-		double sell = -1.0f;
+		double buy = -2.0f;
+		double sell = -2.0f;
 		try {
-			buy = Double.parseDouble(args[0]);
-			sell = Double.parseDouble(args[1]);
+			buy = (args[0].equalsIgnoreCase("disabled")) ? -1.0f : Double.parseDouble(args[0]);
+			sell = (args[1].equalsIgnoreCase("disabled")) ? -1.0f : Double.parseDouble(args[1]);
+			if (buy < 0.0d && buy != -2.0f) {
+				buy = -1.0f;
+			}
+			if (sell < 0.0d && sell != -2.0f) {
+				sell = -1.0f;
+			}
 		} catch(Exception e) {
 		}
-		if (buy < 0.0d || sell < 0.0d) {
-			Util.msg(ply, "&4Please enter valid prices");
+		if (buy < -1.0d || sell < -1.0d) {
+			Util.msg(true, ply, LanguageHandler.get("addValidPrice"));
 			return;
 		}
 		addToShop(ply.getUniqueId(), ply, buy, sell);
@@ -68,17 +75,17 @@ public final class SubCommandAdd implements ISubCommand {
 	private void addToShop(UUID shopId, Player holder, double buy, double sell) {
 		ItemStack stack = holder.getInventory().getItemInMainHand();
 		if (stack == null || stack.getType() == null || stack.getType().equals(Material.AIR) || stack.getAmount() <= 0) {
-			Util.msg(holder, "&4Please hold the item to add to your shop in your main hand.");
+			Util.msg(true, holder, LanguageHandler.get("addInHand"));
 			return;
 		}
 		PlayerShop shop = ShopHandler.getShop(shopId);
 		if (shop.hasItem(stack)) {
-			Util.msg(holder, "&4Your shop already contains this item.");
+			Util.msg(true, holder, LanguageHandler.get("addAlreadyHas"));
 			return;
 		}
 		shop.addItem(stack, buy, sell);
 		ShopHandler.save();
-		Util.msg(holder, "&2The item has been added to your shop. Use &l/shop refill&r&2 to add items to the amount.");
+		Util.msg(true, holder, LanguageHandler.get("addSuccess"));
 	}
 	
 }
