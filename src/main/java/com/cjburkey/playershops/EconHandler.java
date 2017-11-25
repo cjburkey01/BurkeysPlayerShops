@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.cjburkey.playershops.shop.PlayerShop;
+import com.cjburkey.playershops.shop.ShopHandler;
 import com.cjburkey.playershops.shop.ShopItemData;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -48,7 +49,10 @@ public final class EconHandler {
 			give(ply.getUniqueId(), amt * dat.getBuy());
 			return;
 		}
+		shop.setAmount(stack, dat.getStock() - amt);
+		//shop.getData(stack).setStock(dat.getStock() - amt);
 		ply.getInventory().addItem(stack);
+		ShopHandler.save();
 	}
 	
 	public static void trySell(Player ply, ItemStack stack, int amt, PlayerShop shop) {
@@ -75,6 +79,9 @@ public final class EconHandler {
 			}
 		}
 		ply.getInventory().removeItem(stack);
+		shop.setAmount(stack, dat.getStock() + amt);
+		//shop.getData(stack).setStock(dat.getStock() + amt);
+		ShopHandler.save();
 	}
 	
 	public static boolean take(UUID player, double amt) {

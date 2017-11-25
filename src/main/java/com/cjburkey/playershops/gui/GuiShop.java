@@ -36,6 +36,12 @@ public class GuiShop implements IInvScreen {
 		clickableItems = new InvGuiItem[(ShopHandler.SHOP_ROWS + 1) * 9];
 	}
 	
+	public void refresh() {
+		inv.clear();
+		clickableItems = new InvGuiItem[(ShopHandler.SHOP_ROWS + 1) * 9];
+		open();
+	}
+	
 	public void open() {
 		Set<Entry<ItemStack, ShopItemData>> items = shop.getItems(page * ShopHandler.SHOP_ROWS * 9, (page + 1) * ShopHandler.SHOP_ROWS * 9).entrySet();
 		int i = 0;
@@ -106,6 +112,7 @@ public class GuiShop implements IInvScreen {
 			}
 			if (item.getStack().equals(stack)) {
 				item.click(e.getClick());
+				refresh();
 				return;
 			}
 		}

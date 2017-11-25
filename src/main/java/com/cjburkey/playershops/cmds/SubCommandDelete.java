@@ -45,7 +45,7 @@ public final class SubCommandDelete implements ISubCommand {
 			return;
 		}
 		if (!ShopHandler.hasShop(ply.getUniqueId())) {
-			Util.msg(true, sender, LanguageHandler.get("deleteNoShop"));
+			Util.msg(true, sender, LanguageHandler.get("createShop"));
 			return;
 		}
 		ShopHandler.deleteShop(ply.getUniqueId());

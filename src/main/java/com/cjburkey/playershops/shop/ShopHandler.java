@@ -51,11 +51,9 @@ public final class ShopHandler {
 	public static boolean save() {
 		for (PlayerShop shop : shops) {
 			boolean worked = IO.writeShop(shop);
-			if (worked) {
-				Util.log("Saved shop for: " + shop.getOwner());
-				continue;
+			if (!worked) {
+				Util.log("Couldn't save for: " + shop.getOwner());
 			}
-			Util.log("Couldn't save for: " + shop.getOwner());
 		}
 		return true;
 	}

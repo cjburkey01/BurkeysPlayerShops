@@ -57,7 +57,7 @@ public final class SubCommandHandler {
 	}
 	
 	private static void showUsage(ICommand parent, ISubCommand subCmd, CommandSender sender) {
-		Util.msg(true, sender, getUsage(true, parent, subCmd));
+		Util.msg(false, sender, getUsage(true, parent, subCmd));
 	}
 	
 	public static String getUsage(boolean usageErr, ICommand parent, ISubCommand subCmd) {

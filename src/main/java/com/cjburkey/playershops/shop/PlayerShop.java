@@ -38,9 +38,13 @@ public final class PlayerShop {
 		if (data == null) {
 			return false;
 		}
-		data.setStock(data.getStock() + in.getAmount());
+		setAmount(in, in.getAmount() + data.getStock());
 		in.setAmount(0);
 		return true;
+	}
+	
+	public ShopItemData setData(ItemStack stack, ShopItemData data) {
+		return items.put(stack, data);
 	}
 	
 	public boolean addItem(ItemStack stack, double buy, double sell) {
@@ -49,9 +53,22 @@ public final class PlayerShop {
 		}
 		ItemStack add = new ItemStack(stack);
 		add.setAmount(1);
-		boolean worked = items.put(add, new ShopItemData(buy, sell)) == null;
+		boolean worked = setData(add, new ShopItemData(buy, sell)) == null;
 		organize();
 		return worked;
+	}
+	
+	public void setAmount(ItemStack stack, int amt) {
+		if (!hasItem(stack)) {
+			return;
+		}
+		ItemStack already = getStoredStack(stack);
+		ShopItemData data = getData(already);
+		if (data == null) {
+			return;
+		}
+		data.setStock(amt);
+		setData(already, data);
 	}
 	
 	public boolean removeItem(ItemStack stack) {

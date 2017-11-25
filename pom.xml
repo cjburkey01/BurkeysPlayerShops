@@ -1,11 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cjburkey</groupId>
-	<url>http://cjburkey.com/</url>
+	<url>https://github.com/cjburkey01/BurkeysPlayerShops</url>
 	<artifactId>playershops</artifactId>
 	<version>0.0.1</version>
 	<name>BurkeysPlayerShops</name>
 	<description>Independent GUI-Shops Per Player</description>
+	<organization>
+		<name>CJ Burkey Spigot Plugins</name>
+		<url>https://www.spigotmc.org/members/cjburkey01.98921/</url>
+	</organization>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/cjburkey01/BurkeysPlayerShops/issues</url>
+	</issueManagement>
 	<repositories>
 		<repository>
 			<id>spigotmc-repo</id>
