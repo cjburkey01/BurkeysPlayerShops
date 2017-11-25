@@ -1,20 +1,23 @@
 package com.cjburkey.playershops.shop;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bukkit.inventory.ItemStack;
+import com.cjburkey.playershops.Util;
 
 public final class PlayerShop {
 	
 	private final UUID owner;
-	private final HashMap<ItemStack, ShopItemData> items;
+	private final Map<ItemStack, ShopItemData> items;
 	
-	public PlayerShop(UUID owner, HashMap<ItemStack, ShopItemData> items) {
+	public PlayerShop(UUID owner, Map<ItemStack, ShopItemData> items) {
 		this.owner = owner;
 		this.items = items;
 	}
@@ -46,7 +49,9 @@ public final class PlayerShop {
 		}
 		ItemStack add = new ItemStack(stack);
 		add.setAmount(1);
-		return items.put(add, new ShopItemData(buy, sell)) == null;
+		boolean worked = items.put(add, new ShopItemData(buy, sell)) == null;
+		organize();
+		return worked;
 	}
 	
 	public boolean removeItem(ItemStack stack) {
@@ -89,10 +94,23 @@ public final class PlayerShop {
 		return null;
 	}
 	
+	public void organize() {
+		Util.log("Organizing shop");
+		List<Entry<ItemStack, ShopItemData>> s = items.entrySet().stream().sorted(new Comparator<Entry<ItemStack, ShopItemData>>() {
+			public int compare(Entry<ItemStack, ShopItemData> o1, Entry<ItemStack, ShopItemData> o2) {
+				return o1.getKey().getType().compareTo(o2.getKey().getType());
+			}
+		}).collect(Collectors.toList());
+		items.clear();
+		for (Entry<ItemStack, ShopItemData> entry : s) {
+			items.put(entry.getKey(), entry.getValue());
+		}
+	}
+	
 	// Start:	inclusive
 	// End:		exclusive
 	public Map<ItemStack, ShopItemData> getItems(int start, int end) {
-		Map<ItemStack, ShopItemData> out = new HashMap<>();
+		Map<ItemStack, ShopItemData> out = new LinkedHashMap<>();
 		List<ItemStack> keys = new ArrayList<>(items.keySet());
 		List<ShopItemData> vals = new ArrayList<>(items.values());
 		end = Integer.min(items.size(), end);

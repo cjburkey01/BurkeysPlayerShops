@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class PlayerStorage {
 	
-	private static final Map<String, UUID> joined = new HashMap<>();
+	private static final Map<String, UUID> joined = new LinkedHashMap<>();
 	
 	public static void onPlayerJoin(Player player) {
 		if (hasPlayerJoined(player)) {

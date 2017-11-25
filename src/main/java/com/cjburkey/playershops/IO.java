@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -125,7 +126,7 @@ public final class IO {
 		if (items == null || data == null || items.length != data.length) {
 			return null;
 		}
-		HashMap<ItemStack, ShopItemData> map = new HashMap<>();
+		Map<ItemStack, ShopItemData> map = new LinkedHashMap<>();
 		for (int i = 0; i < items.length; i ++) {
 			map.put(items[i], ShopItemData.parse(data[i]));
 		}

@@ -1,14 +1,12 @@
 package com.cjburkey.playershops.shop;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import com.cjburkey.playershops.IO;
 import com.cjburkey.playershops.PlayerStorage;
 import com.cjburkey.playershops.Util;
@@ -24,7 +22,7 @@ public final class ShopHandler {
 		if (hasShop(ply)) {
 			return false;
 		}
-		return shops.add(new PlayerShop(ply, new HashMap<ItemStack, ShopItemData>()));
+		return shops.add(new PlayerShop(ply, new LinkedHashMap<ItemStack, ShopItemData>()));
 	}
 	
 	public static boolean deleteShop(UUID ply) {

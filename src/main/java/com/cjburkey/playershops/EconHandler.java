@@ -30,6 +30,7 @@ public final class EconHandler {
 		stack = new ItemStack(stack);
 		stack.setAmount(amt);
 		ShopItemData dat = shop.getData(stack);
+		Util.log(stack);
 		if (dat.getBuy() < 0.0d) {
 			Util.msg(ply, "&cBuying is disabled for this item in this shop.");
 			return;
@@ -38,8 +39,13 @@ public final class EconHandler {
 			Util.msg(ply, "&cNot enough items in stock.");
 			return;
 		}
-		if (dat.getBuy() > 0.0d && !take(ply.getUniqueId(), amt * shop.getData(stack).getBuy())) {
+		if (dat.getBuy() > 0.0d && !take(ply.getUniqueId(), amt * dat.getBuy())) {
 			Util.msg(ply, "&cYou do not have enough money.");
+			return;
+		}
+		if (dat.getBuy() > 0.0d && !give(shop.getOwner(), amt * dat.getBuy())) {
+			Util.msg(ply, "&cFailed to give money to shop owner, refunding you.");
+			give(ply.getUniqueId(), amt * dat.getBuy());
 			return;
 		}
 		ply.getInventory().addItem(stack);
@@ -63,7 +69,8 @@ public final class EconHandler {
 				return;
 			}
 			if (!give(ply.getUniqueId(), amt * dat.getSell())) {
-				Util.msg(ply, "&cCouldn't give money.");
+				Util.msg(ply, "&cFailed to transfer money to shop owner, refunding shop owner.");
+				give(shop.getOwner(), amt * dat.getSell());
 				return;
 			}
 		}

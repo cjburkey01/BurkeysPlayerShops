@@ -4,12 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import com.cjburkey.playershops.EconHandler;
 import com.cjburkey.playershops.Util;
+import com.cjburkey.playershops.inventory.GuiHandler;
 import com.cjburkey.playershops.inventory.IInvScreen;
 import com.cjburkey.playershops.inventory.InvGuiItem;
 import com.cjburkey.playershops.shop.PlayerShop;
@@ -22,14 +25,14 @@ public class GuiShop implements IInvScreen {
 	private final Inventory inv;
 	private final Player ply;
 	private final int page;
-	private InvGuiItem[] items;
+	private InvGuiItem[] clickableItems;
 	
 	public GuiShop(PlayerShop shop, Inventory inv, Player ply, int page) {
 		this.shop = shop;
 		this.inv = inv;
 		this.ply = ply;
 		this.page = page;
-		items = new InvGuiItem[ShopHandler.SHOP_ROWS * 9];
+		clickableItems = new InvGuiItem[(ShopHandler.SHOP_ROWS + 1) * 9];
 	}
 	
 	public void open() {
@@ -38,34 +41,67 @@ public class GuiShop implements IInvScreen {
 		for (Entry<ItemStack, ShopItemData> entry : items) {
 			ItemStack stack = buildStack(entry.getKey(), entry.getValue());
 			inv.setItem(i, stack);
-			this.items[i] = new InvGuiItem(stack, (e) -> {
+			clickableItems[i] = new InvGuiItem(stack, (e) -> {
 				if (e.isLeftClick()) {
 					if (e.isShiftClick()) {
-						// TODO: TRY BUY 64
+						EconHandler.tryBuy(ply, entry.getKey(), 64, shop);
 						return;
 					}
-					// TODO: TRY BUY 1
+					EconHandler.tryBuy(ply, entry.getKey(), 1, shop);
 					return;
 				}
 				if (e.isRightClick()) {
 					if (e.isShiftClick()) {
-						// TODO: TRY SELL 64
+						EconHandler.trySell(ply, entry.getKey(), 64, shop);
 						return;
 					}
-					// TODO: TRY SELL 1
+					EconHandler.trySell(ply, entry.getKey(), 1, shop);
 					return;
 				}
 			});
 			i ++;
 		}
+		if (page > 0) {
+			Material prevPage = Material.BARRIER;
+			ItemStack prev = new ItemStack(prevPage, 1);
+			i = inv.getSize() - 9;
+			inv.setItem(i, prev);
+			clickableItems[i] = new InvGuiItem(prev, (e) -> {
+				if (e.isLeftClick()) {
+					GuiHandler.close(ply);
+					ShopHandler.showShop(shop.getOwner(), ply, page - 1);
+				}
+			});
+		}
+		if (page < (int) Math.ceil(((double) shop.getItems().size() / (double) (ShopHandler.SHOP_ROWS * 9))) - 1) {
+			Material nextPage = Material.FEATHER;
+			ItemStack next = new ItemStack(nextPage, 1);
+			i = inv.getSize() - 1;
+			inv.setItem(i, next);
+			clickableItems[i] = new InvGuiItem(next, (e) -> {
+				if (e.isLeftClick()) {
+					GuiHandler.close(ply);
+					ShopHandler.showShop(shop.getOwner(), ply, page + 1);
+				}
+			});
+		}
 	}
 	
 	public void click(InventoryClickEvent e) {
-		
-	}
-	
-	public ItemStack atPos(int x, int y) {
-		return null;
+		e.setCancelled(true);
+		ItemStack stack = e.getCurrentItem();
+		if (stack == null) {
+			return;
+		}
+		for (InvGuiItem item : clickableItems) {
+			if (item == null) {
+				continue;
+			}
+			if (item.getStack().equals(stack)) {
+				item.click(e.getClick());
+				return;
+			}
+		}
 	}
 	
 	public Player getOpener() {
