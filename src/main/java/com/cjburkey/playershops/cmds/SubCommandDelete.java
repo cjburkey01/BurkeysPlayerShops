@@ -36,6 +36,7 @@ public final class SubCommandDelete implements ISubCommand {
 		}
 		Player ply = (Player) sender;
 		if (args.length == 1) {
+			// TODO: ADMIN
 			if (!ply.hasPermission("playershops.admin")) {
 				Util.msg(sender, "&4You do not have permission to delete shops for other players.");
 				return;
@@ -47,6 +48,7 @@ public final class SubCommandDelete implements ISubCommand {
 			return;
 		}
 		ShopHandler.deleteShop(ply.getUniqueId());
+		ShopHandler.save();
 		Util.msg(sender, "&2Your shop has been deleted.");
 	}
 	

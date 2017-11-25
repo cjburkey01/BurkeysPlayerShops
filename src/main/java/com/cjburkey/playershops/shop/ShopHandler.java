@@ -1,23 +1,30 @@
 package com.cjburkey.playershops.shop;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import com.cjburkey.playershops.IO;
+import com.cjburkey.playershops.PlayerStorage;
 import com.cjburkey.playershops.Util;
+import com.cjburkey.playershops.gui.GuiShop;
+import com.cjburkey.playershops.inventory.GuiHandler;
 
 public final class ShopHandler {
 	
+	public static final int SHOP_ROWS = 5;
 	private static final List<PlayerShop> shops = new ArrayList<>();
 	
 	public static boolean createShop(UUID ply) {
 		if (hasShop(ply)) {
 			return false;
 		}
-		shops.add(new PlayerShop(ply, new HashMap<ItemStack, ShopItemData>()));
-		return save();
+		return shops.add(new PlayerShop(ply, new HashMap<ItemStack, ShopItemData>()));
 	}
 	
 	public static boolean deleteShop(UUID ply) {
@@ -26,8 +33,7 @@ public final class ShopHandler {
 			return false;
 		}
 		IO.deleteShop(ply);
-		shops.remove(shop);
-		return save();
+		return shops.remove(shop);
 	}
 	
 	public static boolean hasShop(UUID ply) {
@@ -35,11 +41,6 @@ public final class ShopHandler {
 	}
 	
 	public static PlayerShop getShop(UUID ply) {
-		boolean loaded = load();
-		if (!loaded) {
-			Util.log("Shops couldn't be loaded.");
-			return null;
-		}
 		for (PlayerShop shop : shops) {
 			if (shop.getOwner().equals(ply)) {
 				return shop;
@@ -71,6 +72,13 @@ public final class ShopHandler {
 			Util.log("Loaded shop for: " + p.getOwner());
 		}
 		return true;
+	}
+	
+	public static void showShop(UUID shopid, Player player, int page) {
+		PlayerShop shop = ShopHandler.getShop(shopid);
+		Inventory invShop = Util.createGui(player, SHOP_ROWS + 1, "Shop of &l" + PlayerStorage.getName(shopid));
+		GuiShop shopGui = new GuiShop(shop, invShop, player, page);
+		GuiHandler.open(shopGui);
 	}
 	
 }

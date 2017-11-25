@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public final class Util {
 	
@@ -35,12 +34,8 @@ public final class Util {
 		return String.format("[%s] %s", PlayerShops.getInstance().getDescription().getPrefix(), color(out));
 	}
 	
-	public static Inventory openGui(Player player, int rows, String title) {
+	public static Inventory createGui(Player player, int rows, String title) {
 		return Bukkit.createInventory(player, rows * 9, color(title));
-	}
-	
-	public static boolean itemsSame(ItemStack stack1, ItemStack stack2) {
-		return stack1.isSimilar(stack2);
 	}
 	
 }

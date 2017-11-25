@@ -1,11 +1,13 @@
 package com.cjburkey.playershops.shop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.inventory.ItemStack;
-import com.cjburkey.playershops.Util;
 
 public final class PlayerShop {
 	
@@ -25,7 +27,7 @@ public final class PlayerShop {
 		return items.entrySet();
 	}
 	
-	public boolean addQuantity(ItemStack in, double buy, double sell) {
+	public boolean addQuantity(ItemStack in) {
 		if (!hasItem(in)) {
 			return false;
 		}
@@ -42,12 +44,27 @@ public final class PlayerShop {
 		if (hasItem(stack)) {
 			return false;
 		}
-		return items.put(stack, new ShopItemData(buy, sell)) != null;
+		ItemStack add = new ItemStack(stack);
+		add.setAmount(1);
+		return items.put(add, new ShopItemData(buy, sell)) == null;
+	}
+	
+	public boolean removeItem(ItemStack stack) {
+		if (!hasItem(stack)) {
+			return false;
+		}
+		for (Entry<ItemStack, ShopItemData> entry : items.entrySet()) {
+			if (entry.getKey().isSimilar(stack)) {
+				items.remove(entry.getKey());
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean hasItem(ItemStack stack) {
 		for (Entry<ItemStack, ShopItemData> entry : items.entrySet()) {
-			if (Util.itemsSame(entry.getKey(), stack)) {
+			if (entry.getKey().isSimilar(stack)) {
 				return true;
 			}
 		}
@@ -56,11 +73,33 @@ public final class PlayerShop {
 	
 	public ShopItemData getData(ItemStack stack) {
 		for (Entry<ItemStack, ShopItemData> entry : items.entrySet()) {
-			if (Util.itemsSame(entry.getKey(), stack)) {
+			if (entry.getKey().isSimilar(stack)) {
 				return entry.getValue();
 			}
 		}
 		return null;
+	}
+	
+	public ItemStack getStoredStack(ItemStack in) {
+		for (Entry<ItemStack, ShopItemData> entry : items.entrySet()) {
+			if (entry.getKey().isSimilar(in)) {
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
+	
+	// Start:	inclusive
+	// End:		exclusive
+	public Map<ItemStack, ShopItemData> getItems(int start, int end) {
+		Map<ItemStack, ShopItemData> out = new HashMap<>();
+		List<ItemStack> keys = new ArrayList<>(items.keySet());
+		List<ShopItemData> vals = new ArrayList<>(items.values());
+		end = Integer.min(items.size(), end);
+		for (int i = start; i < end; i ++) {
+			out.put(keys.get(i), vals.get(i));
+		}
+		return out;
 	}
 	
 	public int hashCode() {

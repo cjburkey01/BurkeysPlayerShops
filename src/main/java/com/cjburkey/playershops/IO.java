@@ -17,10 +17,12 @@ import com.cjburkey.playershops.shop.ShopItemData;
 public final class IO {
 	
 	public static File pluginDir;
+	public static File playerStore;
 	public static File shopDir;
 	
 	public static void init(PlayerShops p) {
 		pluginDir = p.getDataFolder();
+		playerStore = new File(pluginDir, "/players.txt");
 		shopDir = new File(pluginDir, "/data/");
 		if (!shopDir.exists()) {
 			shopDir.mkdirs();
@@ -97,7 +99,6 @@ public final class IO {
 		return shops.toArray(new PlayerShop[shops.size()]);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static PlayerShop shopFromString(UUID owner, String input) {
 		YamlConfiguration conf = new YamlConfiguration();
 		try {
@@ -111,16 +112,16 @@ public final class IO {
 		if (!conf.contains("items") || !conf.contains("data")) {
 			return null;
 		}
-		Object tmp = conf.get("items");
-		if (tmp != null && tmp instanceof ArrayList) {
-			List<ItemStack> arr = (ArrayList<ItemStack>) tmp;
-			items = arr.toArray(new ItemStack[arr.size()]);
+		
+		List<?> tmp = conf.getList("items");
+		if (tmp != null) {
+			items = tmp.toArray(new ItemStack[tmp.size()]);
 		}
-		tmp = conf.get("data");
-		if (tmp != null && tmp instanceof ArrayList) {
-			List<String> arr = (ArrayList<String>) tmp;
-			data = arr.toArray(new String[arr.size()]);
+		tmp = conf.getList("data");
+		if (tmp != null) {
+			data = tmp.toArray(new String[tmp.size()]);
 		}
+		
 		if (items == null || data == null || items.length != data.length) {
 			return null;
 		}

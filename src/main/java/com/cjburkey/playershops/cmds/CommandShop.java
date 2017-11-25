@@ -12,8 +12,8 @@ public final class CommandShop extends CommandBase {
 		sch = new SubCommandHandler(true);
 		sch.addSubCommand(new SubCommandOpen());
 		sch.addSubCommand(new SubCommandCreate());
-		sch.addSubCommand(new SubCommandAdd());
 		sch.addSubCommand(new SubCommandRemove());
+		sch.addSubCommand(new SubCommandAdd());
 		sch.addSubCommand(new SubCommandRefill());
 		sch.addSubCommand(new SubCommandDelete());
 	}
